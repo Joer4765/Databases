@@ -173,8 +173,6 @@ create table reviewer_topic (
         on delete cascade
 );
 
-# drop database scientific_journal;
-
 # Data insertion
 
 -- Insert into language table
