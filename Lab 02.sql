@@ -1,179 +1,103 @@
-create database scientific_journal;
-use scientific_journal;
-
-# Tables creation
-
 create table language (
-    id int not null auto_increment,
-    name varchar(25),
-    primary key (id)
+    id serial primary key,
+    name varchar(25)
 );
 
 create table section (
-    id int not null auto_increment,
-    name varchar(255),
-    primary key (id)
+    id serial primary key,
+    name varchar(255)
 );
 
 create table subsection (
-    id int not null auto_increment,
+    id serial primary key,
     name varchar(255),
-    section_id int not null,
-    primary key (id),
-    foreign key (section_id)
-        references section(id)
-        on update cascade
-        on delete cascade
+    section_id integer references section(id) on delete cascade
 );
 
 create table topic (
-    id int not null auto_increment,
+    id serial primary key,
     english_name varchar(255),
     ukrainian_name varchar(255),
     spanish_name varchar(255),
-    subsection_id int not null,
-    primary key (id),
-    foreign key (subsection_id)
-        references subsection(id)
-        on update cascade
-        on delete cascade
+    subsection_id integer references subsection(id) on delete cascade
 );
 
 create table article (
-    id int not null auto_increment,
+    id serial primary key,
     file_address varchar(255),
-    language_id int not null,
-    topic_id int not null,
-    primary key (id),
-    foreign key (language_id)
-        references language(id)
-        on update cascade
-        on delete cascade,
-    foreign key (topic_id)
-        references topic(id)
-        on update cascade
-        on delete cascade
+    language_id integer references language(id) on delete cascade,
+    topic_id integer references topic(id) on delete cascade
 );
 
 create table annotation (
-    id int not null auto_increment,
-    english text not null,
-    ukrainian text not null,
-    spanish text not null,
-    article_id int not null unique,
-    primary key (id),
-    foreign key (article_id)
-        references article(id)
-        on update cascade
-        on delete cascade
+    id serial primary key,
+    english text,
+    ukrainian text,
+    spanish text,
+    article_id integer unique references article(id) on delete cascade
 );
 
 create table author (
-    id int not null auto_increment,
+    id serial primary key,
     first_name varchar(25),
     last_name varchar(25),
-    email varchar(255),
-    primary key (id)
+    email varchar(255)
 );
 
 create table reviewer (
-    id int not null auto_increment,
+    id serial primary key,
     first_name varchar(25),
-    last_name varchar(25),
-    primary key (id)
+    last_name varchar(25)
 );
 
 create table review (
-    id int not null auto_increment,
-    novelty int not null,
-    relevance int not null,
-    literature_completeness int not null,
-    presentation_completeness int not null,
-    text_quality int not null,
-    reviewer_id int not null,
-    article_id int not null,
-    primary key (id),
-    foreign key (reviewer_id)
-        references reviewer(id)
-        on update cascade
-        on delete cascade,
-    foreign key (article_id)
-        references article(id)
-        on update cascade
-        on delete cascade
+    id serial primary key,
+    novelty integer,
+    relevance integer,
+    literature_completeness integer,
+    presentation_completeness integer,
+    text_quality integer,
+    reviewer_id integer references reviewer(id) on delete cascade,
+    article_id integer references article(id) on delete cascade
 );
 
 create table remark_to_authors (
-    id int not null auto_increment,
-    remark text not null,
-    review_id int unique,
-    primary key (id),
-    foreign key (review_id)
-        references review(id)
-        on update cascade
-        on delete cascade
+    id serial primary key,
+    remark text,
+    review_id integer unique references review(id) on delete cascade
 );
 
 create table report_to_editors (
-    id int not null auto_increment,
-    report text not null,
-    review_id int unique,
-    primary key (id),
-    foreign key (review_id)
-        references review(id)
-        on update cascade
-        on delete cascade
+    id serial primary key,
+    report text,
+    review_id integer unique references review(id) on delete cascade
 );
 
 create table keyword (
-    id int not null auto_increment,
-    word varchar(25),
-    primary key (id)
+    id serial primary key,
+    word varchar(25)
 );
 
 create table article_author (
-    article_id int,
-    author_id int,
-    primary key (article_id, author_id),
-    foreign key (article_id)
-        references article(id)
-        on update cascade
-        on delete cascade,
-    foreign key (author_id)
-        references author(id)
-        on update cascade
-        on delete cascade
+    article_id integer references article(id) on delete cascade,
+    author_id integer references author(id) on delete cascade,
+    primary key (article_id, author_id)
 );
 
 create table article_keyword (
-    article_id int not null,
-    keyword_id int not null,
-    primary key (article_id, keyword_id),
-    foreign key (article_id)
-        references article(id)
-        on update cascade
-        on delete cascade,
-    foreign key (keyword_id)
-        references keyword(id)
-        on update cascade
-        on delete cascade
+    article_id integer references article(id) on delete cascade,
+    keyword_id integer references keyword(id) on delete cascade,
+    primary key (article_id, keyword_id)
 );
 
 create table reviewer_topic (
-    reviewer_id int not null,
-    topic_id int not null,
-    primary key (reviewer_id, topic_id),
-    foreign key (reviewer_id)
-        references reviewer(id)
-        on update cascade
-        on delete cascade,
-    foreign key (topic_id)
-        references topic(id)
-        on update cascade
-        on delete cascade
+    reviewer_id integer references reviewer(id) on delete cascade,
+    topic_id integer references topic(id) on delete cascade,
+    primary key (reviewer_id, topic_id)
 );
 
-# Data insertion
+
+-- Data insertion
 
 -- Insert into language table
 insert into language (name) values
