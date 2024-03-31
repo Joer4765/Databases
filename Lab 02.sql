@@ -28,11 +28,12 @@ create table topic
 
 create table article
 (
-    id           serial primary key,
-    file_address varchar(255),
-    publish_date date,
-    language_id  integer references language (id) on delete cascade,
-    topic_id     integer references topic (id) on delete cascade
+    id            serial primary key,
+    file_address  varchar(255),
+    publish_date  date,
+    last_modified timestamp,
+    language_id   integer references language (id) on delete cascade,
+    topic_id      integer references topic (id) on delete cascade
 );
 
 create table annotation
