@@ -15,11 +15,11 @@ create table country_religion
     constraint fk_id_religion
         foreign key (religion_id_religion)
             references religion (id_religion)
-                on delete restrict,
+            on delete restrict,
     constraint fk_country_code
         foreign key (country_id_country)
             references country (id_country)
-                on delete restrict,
+            on delete restrict,
     primary key (country_id_country, religion_id_religion)
 );
 
